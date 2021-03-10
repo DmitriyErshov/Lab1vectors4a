@@ -30,12 +30,36 @@ public:
 
 class Modify
 {
-    int(*visitor)(int x);
+    int(*visitor)(int x, int min);
     vector<int> v;
+    int min;
 public:
-    explicit Modify(int(*visitor)(int x)) {
+    explicit Modify(int min, int(*visitor)(int x, int min)) {
         this->visitor = visitor;
+        this->min = min;
     }
-    void operator()(int x) { v.push_back(visitor(x)); } // накопление
+    void operator()(int x) { 
+        v.push_back(visitor(x, min)); 
+    } // накопление
     vector<int> result() const { return v; } // возврат суммы
+};
+
+class Transform
+{
+    double _halfMax;
+    int countNegative = 0;
+
+public:
+    int(*visitor)(int x, int min);
+    vector<int> v;
+    int min;
+public:
+    explicit Transform(int min, int(*visitor)(int x, int min)) {
+        this->visitor = visitor;
+        this->min = min;
+    }
+    int operator()(int x) {
+        return visitor(x, min);
+    } 
+    vector<int> result() const { return v; } // возврат 
 };

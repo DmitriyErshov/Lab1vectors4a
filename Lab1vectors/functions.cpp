@@ -63,32 +63,42 @@ vector<int> getNumbersFromFile(string fileName)
 
 
 
-void modify(vector<int>& v, int (*visitor)(int x)) {
+void modify(vector<int>& v, int (*visitor)(int x, int min)) {
+
+    int min = findMin(v.begin(), v.end());
+
     for (int i = 0; i < v.size(); i++) {
-        v.at(i) = visitor(v.at(i));
+        v.at(i) = visitor(v.at(i), min);
     }
 }
 
-void modify(vector<int>::iterator begin, vector<int>::iterator end, int(*visitor)(int x))
+void modify(vector<int>::iterator begin, vector<int>::iterator end, int(*visitor)(int x, int min))
 {
+    int min = findMin(begin, end);
+
     vector <int> :: iterator it;
 
     for (it = begin; it <= end - 1; it++) {
-        *it = visitor(*it);
+        *it = visitor(*it, min);
     }
 }
 
-void modifyWithTransform(vector<int>::iterator begin, vector<int>::iterator end, int(*visitor)(int x))
+void modifyWithTransform(vector<int>::iterator begin, vector<int>::iterator end, int(*visitor)(int x, int min))
 {
-    transform(begin, end, begin, visitor);
+    int min = findMin(begin, end);
+
+    Transform s(min, visitor);
+
+    transform(begin, end, begin, s);
 }
 
 
 
-vector<int> modifyWithForEach(vector<int>::iterator begin, vector<int>::iterator end, int(*visitor)(int x))
+vector<int> modifyWithForEach(vector<int>::iterator begin, vector<int>::iterator end, int(*visitor)(int x, int min))
 {
+    int min = findMin(begin, end);
     //for_each(begin, end, visitor);
-    Modify s(visitor);
+    Modify s(min, visitor);
     // вычисление суммы элементов списка
     s = std::for_each(begin, end, s);
     return s.result();
@@ -103,7 +113,19 @@ int calculateSum(vector<int>::iterator begin, vector<int>::iterator end)
     return s.result();
 }
 
+int findMin(vector<int>::iterator begin, vector<int>::iterator end) {
+    vector <int> ::iterator it = begin;
 
+    int min = *begin;
+
+    for (it++; it <= end - 1; it++) {
+        if (*it < min) {
+            min = *it;
+        }
+    }
+
+    return min;
+}
 
 double calculateAvg(vector<int>::iterator begin, vector<int>::iterator end)
 {
@@ -119,6 +141,7 @@ void printToConsole(vector<int>::iterator begin, vector<int>::iterator end)
     for (it = begin; it <= end - 1; it++) {
         cout << *it;
     }
+    cout << endl;
 }
 
 void printToFile(vector<int>::iterator begin, vector<int>::iterator end, string fileName)

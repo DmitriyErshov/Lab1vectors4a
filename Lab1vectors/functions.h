@@ -22,28 +22,26 @@ vector<int> getNumbersFromFile(string fileName);
 функции должен поступать контейнер, в качестве результата функция должна
 возвращать модифицированный контейнер.
 */
-void modify(vector<int>& v, int (*visitor)(int x));
+void modify(vector<int>& v, int (*visitor)(int x, int min));
 
 /*
 Перегруженную функцию modify, принимающую на вход итераторы начала и конца
 обрабатываемой части контейнера.
 */
-void modify(vector <int> ::iterator begin, vector <int> ::iterator end, int (*visitor)(int x));
-
-
+void modify(vector <int> ::iterator begin, vector <int> ::iterator end, int (*visitor)(int x, int min));
 
 
 /*
 Функцию, реализующую требуемое преобразование с использованием алгоритма
 std::transform вместо функции modify.
 */
-void modifyWithTransform(vector <int> ::iterator begin, vector <int> ::iterator end, int (*visitor)(int x));
+void modifyWithTransform(vector <int> ::iterator begin, vector <int> ::iterator end, int (*visitor)(int x, int min));
 
 /*
 Функцию, реализующую требуемое преобразование с использованием алгоритма
 std::for_each вместо функции modify.
 */
-vector<int> modifyWithForEach(vector <int> ::iterator begin, vector <int> ::iterator end, int (*visitor)(int x));
+vector<int> modifyWithForEach(vector <int> ::iterator begin, vector <int> ::iterator end, int (*visitor)(int x, int min));
 
 /*
 Функции, вычисляющие сумму и среднее арифметическое чисел, содержащихся в
@@ -52,6 +50,8 @@ vector<int> modifyWithForEach(vector <int> ::iterator begin, vector <int> ::iter
 int calculateSum(vector <int> ::iterator begin, vector <int> ::iterator end);
 
 double calculateAvg(vector <int> ::iterator begin, vector <int> ::iterator end);
+
+int findMin(vector<int>::iterator begin, vector<int>::iterator end);
 
 void printToConsole(vector <int> ::iterator begin, vector <int> ::iterator end);
 
