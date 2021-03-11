@@ -1,9 +1,6 @@
 #include "functions.h"
 
 
-
-
-
 struct random_gen
 {
     const int l_t, r_t;
@@ -97,9 +94,9 @@ void modifyWithTransform(vector<int>::iterator begin, vector<int>::iterator end,
 vector<int> modifyWithForEach(vector<int>::iterator begin, vector<int>::iterator end, int(*visitor)(int x, int min))
 {
     int min = findMin(begin, end);
-    //for_each(begin, end, visitor);
+    
     Modify s(min, visitor);
-    // вычисление суммы элементов списка
+
     s = std::for_each(begin, end, s);
     return s.result();
 }
@@ -109,6 +106,13 @@ vector<int> modifyWithForEach(vector<int>::iterator begin, vector<int>::iterator
 int calculateSum(vector<int>::iterator begin, vector<int>::iterator end)
 {
     Sum<double> s;
+    s = std::for_each(begin, end, s);
+    return s.result();
+}
+
+double calculateAvg(vector<int>::iterator begin, vector<int>::iterator end)
+{
+    Avg s;
     s = std::for_each(begin, end, s);
     return s.result();
 }
@@ -127,19 +131,12 @@ int findMin(vector<int>::iterator begin, vector<int>::iterator end) {
     return min;
 }
 
-double calculateAvg(vector<int>::iterator begin, vector<int>::iterator end)
-{
-    Avg s;
-    s = std::for_each(begin, end, s);
-    return s.result();
-}
-
 void printToConsole(vector<int>::iterator begin, vector<int>::iterator end)
 {
     vector <int> ::iterator it;
 
     for (it = begin; it <= end - 1; it++) {
-        cout << *it;
+        cout << *it << " ";
     }
     cout << endl;
 }
@@ -153,7 +150,7 @@ void printToFile(vector<int>::iterator begin, vector<int>::iterator end, string 
         vector <int> ::iterator it;
 
         for (it = begin; it <= end - 1; it++) {
-            out << *it;
+            out << *it << " ";
         }
     }
     out.close();

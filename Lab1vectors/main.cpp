@@ -12,7 +12,8 @@ int main() {
 
 	//fillFileWithNumbers("numbers.txt", 10, 10);
 	v = getNumbersFromFile("numbers.txt");
-	 
+	printToConsole(v.begin(), v.end());
+	
 	modify(v, actionFunc);
 	printToConsole(v.begin(), v.end());
 
