@@ -1,5 +1,18 @@
 #pragma once
 
+struct random_gen
+{
+    const int l_t, r_t;
+    random_gen(int l, int r)
+        : l_t(l), r_t(r)
+    {
+    }
+    int operator () ()
+    {
+        return rand() % (r_t - l_t + 1) + l_t;
+    }
+};
+
 class Avg
 {
     double res;
@@ -43,6 +56,7 @@ public:
     } // накопление
     vector<int> result() const { return v; } // возврат суммы
 };
+
 
 class Transform
 {

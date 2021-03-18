@@ -1,6 +1,6 @@
 #include "utills.h"
 #include "functions.h"
-using namespace std;
+
 
 int actionFunc(int x, int min)
 {
@@ -8,29 +8,47 @@ int actionFunc(int x, int min)
 }
 
 int main() {
-	vector<int> v;
+	setlocale(LC_ALL, "Russian");
+	/*
+	v = {1, 2, 3, 4};
+	vector<int> dvec;
+	vector<int>::iterator it_b = v.begin();
+	vector<int>::iterator it_e = v.end();
+	print<vector<int>>(it_b, it_e);*/
 
-	//fillFileWithNumbers("numbers.txt", 10, 10);
+	vector<int> v = { 2, 3, 4, 5 };
+
+	fillFileWithNumbers("numbers.txt", 3, 5);
 	v = getNumbersFromFile("numbers.txt");
-	printToConsole(v.begin(), v.end());
-	
-	modify(v, actionFunc);
-	printToConsole(v.begin(), v.end());
+	vector<int>::iterator begin = v.begin();
+	vector<int>::iterator end = v.end();
+	cout << "Рандомный вектор" << endl;
+	printToConsole<vector<int>>(begin, end);
 
-	v = getNumbersFromFile("numbers.txt");
-	modify(v.begin(), v.end(), actionFunc);
-	printToConsole(v.begin(), v.end());
+	cout << "Обработка modify" << endl;
+	modify<vector<int>>(v, actionFunc);
+	printToConsole<vector<int>>(begin, end);
 
-	v = getNumbersFromFile("numbers.txt");
-	modifyWithTransform(v.begin(), v.end(), actionFunc);
-	printToConsole(v.begin(), v.end());
+	cout << "Обработка перегруженным modify" << endl;
+	//v = getNumbersFromFile("numbers.txt");
+	modify<vector<int>>(begin, end, actionFunc);
+	printToConsole<vector<int>>(begin, end);
 
-	v = getNumbersFromFile("numbers.txt");
-	v = modifyWithForEach(v.begin(), v.end(), actionFunc);
-	printToConsole(v.begin(), v.end());
+	cout << "Обработка modify с Transform" << endl;
+	//v = getNumbersFromFile("numbers.txt");
+	modifyWithTransform<vector<int>>(begin, end, actionFunc);
+	printToConsole<vector<int>>(begin, end);
 
-	cout << calculateSum(v.begin(), v.end()) << endl;
-	cout << calculateAvg(v.begin(), v.end());
+	cout << "Обработка modify с ForEach" << endl;
+	//v = getNumbersFromFile("numbers.txt");
+	v = modifyWithForEach<vector<int>>(begin, end, actionFunc);
+	begin = v.begin();
+	end = v.end();
+	printToConsole<vector<int>>(begin, end);
+
+
+	cout << "Сумма: " << calculateSum(v.begin(), v.end()) << endl;
+	cout << "Среднее: " << calculateAvg(v.begin(), v.end());
 
 	return 0;
 }
