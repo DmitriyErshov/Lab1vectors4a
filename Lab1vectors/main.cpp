@@ -7,19 +7,10 @@ int actionFunc(int x, int min)
 	return x * min;
 }
 
-
 int main() {
 	setlocale(LC_ALL, "Russian");
-	/*
-	v = {1, 2, 3, 4};
-	vector<int> dvec;
-	vector<int>::iterator it_b = v.begin();
-	vector<int>::iterator it_e = v.end();
-	print<vector<int>>(it_b, it_e);*/
 
 	vector<int> v = { 3, 4, 2, 5 };
-	/*vector<int>::iterator begin = v.begin();
-	vector<int>::iterator end = v.end();*/
 
 	fillFileWithNumbers("numbers.txt", 3, 5);
 	v = getNumbersFromFile<int>("numbers.txt");
