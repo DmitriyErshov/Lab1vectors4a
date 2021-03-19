@@ -13,7 +13,7 @@ struct random_gen
     }
 };
 
-class Avg
+template <class T> class Avg
 {
     double res;
     int num;
@@ -22,8 +22,8 @@ public:
     {
         res = 0;
         num = 0;
-    } // инициализация
-    void operator()(int x) { res += x; num++; } // накопление
+    } 
+    void operator()(T x) { res += x; num++; } // накопление
     double result() {
         if (num != 0) {
             res /= num;

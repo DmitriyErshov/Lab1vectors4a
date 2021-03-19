@@ -23,7 +23,7 @@ vector<int> getNumbersFromFile(string fileName);
 возвращать модифицированный контейнер.
 */
 template <typename T>
-void modify(vector<T>& v, T (*visitor)(T x, T min));
+void modify(T& v, int(*visitor)(int x, int min));
 
 /*
 ѕерегруженную функцию modify, принимающую на вход итераторы начала и конца
@@ -44,17 +44,17 @@ void modifyWithTransform(typename T::iterator begin, typename T::iterator end, i
 std::for_each вместо функции modify.
 */
 template <typename T>
-vector<int> modifyWithForEach(typename T::iterator begin, typename T::iterator end, int(*visitor)(int x, int min));
+T modifyWithForEach(typename T::iterator begin, typename T::iterator end, int(*visitor)(int x, int min));
 
 /*
 ‘ункции, вычисл€ющие сумму и среднее арифметическое чисел, содержащихс€ в
 контейнере.
 */
 template <typename T>
-int calculateSum(typename vector <T> ::iterator begin, typename vector <T> ::iterator end);
+T calculateSum(typename vector<T>::iterator begin, typename vector<T>::iterator end);
 
 template <typename T>
-double calculateAvg(typename vector <T> ::iterator begin, typename vector <T> ::iterator end);
+double calculateAvg(typename vector<T>::iterator begin, typename vector<T>::iterator end);
 
 template <typename T>
 int findMin(typename T::iterator begin, typename T::iterator end);
@@ -149,7 +149,7 @@ void modify(T& v, int(*visitor)(int x, int min)) {
 
     //modify<vector<T>>(begin, end, visitor);
 
-	int min = int(findMin<T>(begin, end));
+	int min = findMin<T>(begin, end);
 
 	for (int i = 0; i < v.size(); i++) {
 		v.at(i) = visitor(v.at(i), min);
@@ -169,7 +169,7 @@ void modifyWithTransform(typename T::iterator begin, typename T::iterator end, i
 
 
 template <typename T>
-vector<int> modifyWithForEach(typename T::iterator begin, typename T::iterator end, int(*visitor)(int x, int min))
+T modifyWithForEach(typename T::iterator begin, typename T::iterator end, int(*visitor)(int x, int min))
 {
     int min = findMin<T>(begin, end);
 
@@ -180,18 +180,18 @@ vector<int> modifyWithForEach(typename T::iterator begin, typename T::iterator e
 }
 
 
-//template <typename T>
-int calculateSum(vector<int>::iterator begin, vector<int>::iterator end)
+template <typename T>
+T calculateSum(typename vector<T>::iterator begin, typename vector<T>::iterator end)
 {
-    Sum<double> s;
+    Sum<T> s;
     s = std::for_each(begin, end, s);
     return s.result();
 }
 
-
-double calculateAvg(vector<int>::iterator begin, vector<int>::iterator end)
+template <typename T>
+double calculateAvg(typename vector<T>::iterator begin, typename vector<T>::iterator end)
 {
-    Avg s;
+    Avg<T> s;
     s = std::for_each(begin, end, s);
     return s.result();
 }
