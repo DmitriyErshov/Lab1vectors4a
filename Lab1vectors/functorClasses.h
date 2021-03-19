@@ -41,39 +41,36 @@ public:
     T result() const { return res; } // возврат суммы
 };
 
-class Modify
+template <class T> class Modify
 {
     int(*visitor)(int x, int min);
     vector<int> v;
-    int min;
+    T min;
 public:
-    explicit Modify(int min, int(*visitor)(int x, int min)) {
+    explicit Modify(T min, int(*visitor)(int x, int min)) {
         this->visitor = visitor;
         this->min = min;
     }
-    void operator()(int x) { 
+    void operator()(T x) { 
         v.push_back(visitor(x, min)); 
     } // накопление
-    vector<int> result() const { return v; } // возврат суммы
+    vector<T> result() const { return v; } // возврат суммы
 };
 
 
-class Transform
+template <class T> class Transform
 {
-    double _halfMax;
-    int countNegative = 0;
-
 public:
     int(*visitor)(int x, int min);
-    vector<int> v;
-    int min;
+    vector<T> v;
+    T min;
 public:
-    explicit Transform(int min, int(*visitor)(int x, int min)) {
+    explicit Transform(T min, int(*visitor)(int x, int min)) {
         this->visitor = visitor;
         this->min = min;
     }
-    int operator()(int x) {
+    int operator()(T x) {
         return visitor(x, min);
     } 
-    vector<int> result() const { return v; } // возврат 
+    vector<T> result() const { return v; } // возврат 
 };

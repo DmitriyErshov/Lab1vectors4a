@@ -15,7 +15,8 @@ void fillFileWithNumbers(string fileName, int n, int m);
 Функцию, получающую файл на вход, и возвращающую последовательный
 контейнер, заполненный числами из файла.
 */
-vector<int> getNumbersFromFile(string fileName);
+template <typename T>
+vector<T> getNumbersFromFile(string fileName);
 
 /*
 Функцию modify, выполняющую преобразование полученного контейнера. На вход
@@ -23,7 +24,7 @@ vector<int> getNumbersFromFile(string fileName);
 возвращать модифицированный контейнер.
 */
 template <typename T>
-void modify(T& v, int(*visitor)(int x, int min));
+void modify(vector <T>& v, int(*visitor)(int x, int min));
 
 /*
 Перегруженную функцию modify, принимающую на вход итераторы начала и конца
@@ -37,14 +38,14 @@ void modify(typename vector <T> ::iterator begin, typename vector <T> ::iterator
 std::transform вместо функции modify.
 */
 template <typename T>
-void modifyWithTransform(typename T::iterator begin, typename T::iterator end, int(*visitor)(int x, int min));
+void modifyWithTransform(typename vector <T> ::iterator begin, typename vector <T> ::iterator end, int(*visitor)(int x, int min));
 
 /*
 Функцию, реализующую требуемое преобразование с использованием алгоритма
 std::for_each вместо функции modify.
 */
 template <typename T>
-T modifyWithForEach(typename T::iterator begin, typename T::iterator end, int(*visitor)(int x, int min));
+vector <T> modifyWithForEach(typename vector <T> ::iterator begin, typename vector <T> ::iterator end, int(*visitor)(int x, int min));
 
 /*
 Функции, вычисляющие сумму и среднее арифметическое чисел, содержащихся в
@@ -57,10 +58,10 @@ template <typename T>
 double calculateAvg(typename vector<T>::iterator begin, typename vector<T>::iterator end);
 
 template <typename T>
-int findMin(typename T::iterator begin, typename T::iterator end);
+T findMin(typename vector <T> ::iterator begin, typename vector <T> ::iterator end);
 
 template <typename T>
-void printToConsole(typename T::iterator begin, typename T::iterator end);
+void printToConsole(typename vector<T>::iterator begin, typename vector<T>::iterator end);
 
 template <typename T>
 void printToFile(typename vector <T> ::iterator begin, typename vector <T> ::iterator end, string fileName);
@@ -90,17 +91,18 @@ void fillFileWithNumbers(string fileName, int n, int m)
     out.close();
 }
 
-vector<int> getNumbersFromFile(string fileName)
+template <typename T>
+vector<T> getNumbersFromFile(string fileName)
 {
+    vector<T> v1;
     ifstream in;       // поток для чтения
     in.open(fileName); // окрываем файл для записи
     if (in.is_open())
     {
         int n;
         in >> n;
-        vector<int> v1;
 
-        int temp;
+        T temp;
         for (int i = 0; i < n; i++)
         {
             in >> temp;
@@ -111,14 +113,13 @@ vector<int> getNumbersFromFile(string fileName)
     }
     in.close();
 
-    return vector<int>();
+    return v1;
 }
 
 template <typename T>
-int findMin(typename T::iterator begin, typename T::iterator end) {
-    typename T::iterator it = begin;
-
-    int min = *begin;
+T findMin(typename vector <T> ::iterator begin, typename vector <T> ::iterator end) {
+    typename vector <T> ::iterator it = begin;
+    T min = *begin;
 
     for (it++; it <= end - 1; it++) {
         if (*it < min) {
@@ -130,11 +131,11 @@ int findMin(typename T::iterator begin, typename T::iterator end) {
 }
 
 template <typename T>
-void modify(typename T::iterator begin, typename T::iterator end, int(*visitor)(int x, int min))
+void modify(typename vector <T> ::iterator begin, typename vector <T> ::iterator end, int(*visitor)(int x, int min))
 {
-    int min = findMin<T>(begin, end);
+    T min = findMin<T>(begin, end);
 
-    typename T::iterator it;
+    typename vector <T> ::iterator it;
 
     for (it = begin; it <= end - 1; it++) {
         *it = visitor(*it, min);
@@ -142,14 +143,13 @@ void modify(typename T::iterator begin, typename T::iterator end, int(*visitor)(
 }
 
 template <typename T>
-void modify(T& v, int(*visitor)(int x, int min)) {
+void modify(vector <T>& v, int(*visitor)(int x, int min)) {
 
-    typename T::iterator begin = v.begin();
-    typename T::iterator end = v.end();
-
+    typename vector <T> ::iterator begin = v.begin();
+    typename vector <T> ::iterator end = v.end();
     //modify<vector<T>>(begin, end, visitor);
 
-	int min = findMin<T>(begin, end);
+	T min = findMin<T>(begin, end);
 
 	for (int i = 0; i < v.size(); i++) {
 		v.at(i) = visitor(v.at(i), min);
@@ -158,22 +158,22 @@ void modify(T& v, int(*visitor)(int x, int min)) {
 
 
 template <typename T>
-void modifyWithTransform(typename T::iterator begin, typename T::iterator end, int(*visitor)(int x, int min))
+void modifyWithTransform(typename vector <T> ::iterator begin, typename vector <T> ::iterator end, int(*visitor)(int x, int min))
 {
-    int min = findMin<T>(begin, end);
+    T min = findMin<T>(begin, end);
 
-    Transform s(min, visitor);
+    Transform<T> s(min, visitor);
 
     transform(begin, end, begin, s);
 }
 
 
 template <typename T>
-T modifyWithForEach(typename T::iterator begin, typename T::iterator end, int(*visitor)(int x, int min))
+vector <T> modifyWithForEach(typename vector <T> ::iterator begin, typename vector <T> ::iterator end, int(*visitor)(int x, int min))
 {
-    int min = findMin<T>(begin, end);
+    T min = findMin<T>(begin, end);
 
-    Modify s(min, visitor);
+    Modify<T> s(min, visitor);
 
     s = std::for_each(begin, end, s);
     return s.result();
@@ -197,9 +197,9 @@ double calculateAvg(typename vector<T>::iterator begin, typename vector<T>::iter
 }
 
 template <typename T>
-void printToConsole(typename T::iterator begin, typename T::iterator end)
+void printToConsole(typename vector<T>::iterator begin, typename vector<T>::iterator end)
 {
-    typename T::iterator it;
+    typename vector <T> ::iterator it;
 
     for (it = begin; it <= end - 1; it++) {
         cout << *it << " ";
